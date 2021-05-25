@@ -7,7 +7,14 @@ const changeCurrentBlockType = (editorState, type, text, blockMetadata = {}) => 
   const blockMap = currentContent.getBlockMap();
   const block = blockMap.get(key);
   const data = block.getData().merge(blockMetadata);
-  const newBlock = block.merge({ type, data, text: text || '' });
+  const oldText = block.getText();
+  const offset = oldText.indexOf(text || "");
+  const newBlock = block.merge({ 
+    type, 
+    data, 
+    text: text || '', 
+    characterList: block.getCharacterList().splice(0, offset), 
+  });
   const newSelection = selection.merge({
     anchorOffset: 0,
     focusOffset: 0,
